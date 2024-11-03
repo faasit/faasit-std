@@ -1,6 +1,7 @@
 import { ir } from '@faasit/core'
 import { z } from 'zod'
 import { runtime } from '@faasit/core'
+import path from 'path';
 
 export type ObjectValue = ir.Types.ObjectValue;
 export type TypeCallValue = ir.Types.TypeCallValue;
@@ -69,6 +70,9 @@ export type Event = z.infer<typeof EventSchema>
 
 const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
   kind: z.string(),
+  oss: z.object({
+    path: z.string(),
+  }).optional(),
 }))
 
 const FunctionTriggerSchema = z.object({
