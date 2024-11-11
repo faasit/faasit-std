@@ -35,3 +35,7 @@ block provider {
     kind = string
   }
 }
+
+block secret {
+  input = map<string, string>
+}

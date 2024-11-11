@@ -68,10 +68,15 @@ export const EventSchema = ir.types.CustomBlockSchemaT(z.object({
 
 export type Event = z.infer<typeof EventSchema>
 
+const SecretSchema = ir.types.CustomBlockSchemaWithExtraT(
+  z.record(z.string(), z.string())
+);
+
 const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
   kind: z.string(),
   oss: z.object({
-    path: z.string(),
+    bucket: z.string(),
+    region: z.string(),
   }).optional(),
 }))
 
@@ -111,7 +116,8 @@ const ApplicationSchema = ir.types.CustomBlockSchemaT(z.object({
   workflow: ir.types.ReferenceSchemaT(WorkflowSchema).optional(),
   inputExamples: z.array(z.object({
     value: z.unknown()
-  })).default(() => [])
+  })).default(() => []),
+  secret: ir.types.ReferenceSchemaT(SecretSchema).optional(),
 }))
 
 export type Workflow = z.output<typeof WorkflowSchema>
