@@ -68,10 +68,6 @@ export const EventSchema = ir.types.CustomBlockSchemaT(z.object({
 
 export type Event = z.infer<typeof EventSchema>
 
-const SecretSchema = ir.types.CustomBlockSchemaWithExtraT(
-  z.record(z.string(), z.string())
-);
-
 const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
   kind: z.string(),
   oss: z.object({
@@ -87,6 +83,8 @@ const FunctionTriggerSchema = z.object({
 
 const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   runtime: z.string(),
+  image: z.string().optional(),
+  opts: z.record(z.string(), z.string()).optional(),
   codeDir: z.string().default(""),
   handler: z.string().optional(),
   resource: z.object({
@@ -116,8 +114,7 @@ const ApplicationSchema = ir.types.CustomBlockSchemaT(z.object({
   workflow: ir.types.ReferenceSchemaT(WorkflowSchema).optional(),
   inputExamples: z.array(z.object({
     value: z.unknown()
-  })).default(() => []),
-  secret: ir.types.ReferenceSchemaT(SecretSchema).optional(),
+  })).default(() => [])
 }))
 
 export type Workflow = z.output<typeof WorkflowSchema>
