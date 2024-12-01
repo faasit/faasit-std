@@ -114,7 +114,8 @@ const ApplicationSchema = ir.types.CustomBlockSchemaT(z.object({
   workflow: ir.types.ReferenceSchemaT(WorkflowSchema).optional(),
   inputExamples: z.array(z.object({
     value: z.unknown()
-  })).default(() => [])
+  })).default(() => []),
+  opts: z.record(z.string(),z.string()).optional()
 }))
 
 export type Workflow = z.output<typeof WorkflowSchema>
