@@ -92,6 +92,7 @@ const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   opts: z.record(z.string(), z.string()).optional(),
   codeDir: z.string().default(""),
   handler: z.string().optional(),
+  replicas: z.number().optional(),
   resource: z.object({
     cpu: z.string(),
     memory: z.string(),
