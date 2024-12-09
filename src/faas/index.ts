@@ -45,6 +45,7 @@ export interface ProviderInvokeInput {
   app: Application
   funcName: string
   input: unknown
+  provider: Provider
 }
 
 export interface ProviderPlugin {
@@ -79,6 +80,7 @@ const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
     bucket: z.string(),
     region: z.string(),
   }).optional(),
+  opts: z.record(z.string(), z.string()).optional(),
 }))
 
 const FunctionTriggerSchema = z.object({
