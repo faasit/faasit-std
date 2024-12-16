@@ -48,6 +48,12 @@ export interface ProviderInvokeInput {
   provider: Provider
 }
 
+export interface ProviderBuildInput {
+  app: Application
+  provider: Provider
+  registry?: string
+}
+
 export interface ProviderPlugin {
   name: string
 
@@ -62,7 +68,7 @@ export interface ProviderPlugin {
   ) => Promise<void>
 
   build?: (
-    input: ProviderDeployInput,
+    input: ProviderBuildInput,
     ctx: ProviderPluginContext
   ) => Promise<void>
 }
@@ -126,11 +132,17 @@ const ApplicationSchema = ir.types.CustomBlockSchemaT(z.object({
   opts: z.record(z.string(),z.string()).optional()
 }))
 
+const SecretSchema = ir.types.CustomBlockSchemaT(z.object({
+  name: z.string(),
+  value: z.string(),
+}))
+
 export type Workflow = z.output<typeof WorkflowSchema>
 export type Provider = z.output<typeof ProviderSchema>
 export type Application = z.output<typeof ApplicationSchema>
 export type Function = z.output<typeof FunctionSchema>
 export type FunctionTrigger = z.output<typeof FunctionTriggerSchema>
+export type Secret = z.output<typeof SecretSchema>
 
 // special application
 export type WorkflowApplication = Application & { output: { workflow: ir.Types.Reference<Workflow> } }
