@@ -97,6 +97,7 @@ const FunctionTriggerSchema = z.object({
 const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   runtime: z.string(),
   image: z.string().optional(),
+  baseImage: z.string().optional(),
   opts: z.record(z.string(), z.string()).optional(),
   codeDir: z.string().default(""),
   handler: z.string().optional(),
