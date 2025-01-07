@@ -86,7 +86,11 @@ const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
     bucket: z.string(),
     region: z.string(),
   }).optional(),
-  opts: z.record(z.string(), z.string()).optional(),
+  deployment: z.object({
+    runtimeClass: z.string().optional(),
+    startMode: z.string().optional()
+  }).optional(),
+  invoke: z.record(z.string(),z.string()).optional()
 }))
 
 const FunctionTriggerSchema = z.object({
@@ -98,7 +102,6 @@ const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   runtime: z.string(),
   image: z.string().optional(),
   baseImage: z.string().optional(),
-  opts: z.record(z.string(), z.string()).optional(),
   codeDir: z.string().default(""),
   handler: z.string().optional(),
   replicas: z.number().optional(),
