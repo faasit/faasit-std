@@ -1,6 +1,7 @@
 import { ir } from '@faasit/core'
 import { z } from 'zod'
 import { runtime } from '@faasit/core'
+import path from 'path';
 
 export type ObjectValue = ir.Types.ObjectValue;
 export type TypeCallValue = ir.Types.TypeCallValue;
@@ -44,6 +45,13 @@ export interface ProviderInvokeInput {
   app: Application
   funcName: string
   input: unknown
+  provider: Provider
+}
+
+export interface ProviderBuildInput {
+  app: Application
+  provider: Provider
+  registry?: string
 }
 
 export interface ProviderPlugin {
@@ -58,6 +66,11 @@ export interface ProviderPlugin {
     input: ProviderInvokeInput,
     ctx: ProviderPluginContext
   ) => Promise<string | undefined>
+
+  build?: (
+    input: ProviderBuildInput,
+    ctx: ProviderPluginContext
+  ) => Promise<void>
 }
 
 export const EventSchema = ir.types.CustomBlockSchemaT(z.object({
@@ -69,6 +82,15 @@ export type Event = z.infer<typeof EventSchema>
 
 const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
   kind: z.string(),
+  oss: z.object({
+    bucket: z.string(),
+    region: z.string(),
+  }).optional(),
+  deployment: z.object({
+    runtimeClass: z.string().optional(),
+    startMode: z.string().optional()
+  }).optional(),
+  invoke: z.record(z.string(),z.string()).optional()
 }))
 
 const FunctionTriggerSchema = z.object({
@@ -78,8 +100,11 @@ const FunctionTriggerSchema = z.object({
 
 const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   runtime: z.string(),
+  image: z.string().optional(),
+  baseImage: z.string().optional(),
   codeDir: z.string().default(""),
   handler: z.string().optional(),
+  replicas: z.number().optional(),
   resource: z.object({
     cpu: z.string(),
     memory: z.string(),
@@ -107,7 +132,13 @@ const ApplicationSchema = ir.types.CustomBlockSchemaT(z.object({
   workflow: ir.types.ReferenceSchemaT(WorkflowSchema).optional(),
   inputExamples: z.array(z.object({
     value: z.unknown()
-  })).default(() => [])
+  })).default(() => []),
+  opts: z.record(z.string(),z.string()).optional()
+}))
+
+const SecretSchema = ir.types.CustomBlockSchemaT(z.object({
+  name: z.string(),
+  value: z.string(),
 }))
 
 export type Workflow = z.output<typeof WorkflowSchema>
@@ -115,6 +146,7 @@ export type Provider = z.output<typeof ProviderSchema>
 export type Application = z.output<typeof ApplicationSchema>
 export type Function = z.output<typeof FunctionSchema>
 export type FunctionTrigger = z.output<typeof FunctionTriggerSchema>
+export type Secret = z.output<typeof SecretSchema>
 
 // special application
 export type WorkflowApplication = Application & { output: { workflow: ir.Types.Reference<Workflow> } }
