@@ -57,7 +57,7 @@ export interface ProviderPlugin {
   invoke?: (
     input: ProviderInvokeInput,
     ctx: ProviderPluginContext
-  ) => Promise<void>
+  ) => Promise<string | undefined>
 }
 
 export const EventSchema = ir.types.CustomBlockSchemaT(z.object({
