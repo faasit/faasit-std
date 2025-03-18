@@ -90,7 +90,8 @@ const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
     runtimeClass: z.string().optional(),
     startMode: z.string().optional()
   }).optional(),
-  invoke: z.record(z.string(),z.string()).optional()
+  invoke: z.record(z.string(),z.string()).optional(),
+  registry: z.string().optional(),
 }))
 
 const FunctionTriggerSchema = z.object({
@@ -106,8 +107,8 @@ const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   handler: z.string().optional(),
   replicas: z.number().optional(),
   resource: z.object({
-    cpu: z.string(),
-    memory: z.string(),
+    cpu: z.number().optional(),
+    memory: z.number().optional(),
   }).optional(),
   triggers: z.array(FunctionTriggerSchema).default(() => []),
   pubsub: z.object({
@@ -121,7 +122,16 @@ const WorkflowSchema = ir.types.CustomBlockSchemaT(z.object({
 
   // workflow spec runtime and codeDir
   runtime: z.string(),
-  codeDir: z.string()
+  image: z.string().optional(),
+  baseImage: z.string().optional(),
+  codeDir: z.string(),
+  handler: z.string().optional(),
+  replicas: z.number().optional(),
+  resource: z.object({
+    cpu: z.number().optional(),
+    memory: z.number().optional(),
+  }).optional(),
+  role: z.string().optional(),
 }))
 
 const ApplicationSchema = ir.types.CustomBlockSchemaT(z.object({
