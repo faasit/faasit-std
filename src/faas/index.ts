@@ -92,6 +92,7 @@ const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
   }).optional(),
   invoke: z.record(z.string(),z.string()).optional(),
   registry: z.string().optional(),
+  redis_data: z.string().optional()
 }))
 
 const FunctionTriggerSchema = z.object({
