@@ -86,10 +86,7 @@ const ProviderSchema = ir.types.CustomBlockSchemaWithExtraT(z.object({
     bucket: z.string(),
     region: z.string(),
   }).optional(),
-  deployment: z.object({
-    runtimeClass: z.string().optional(),
-    startMode: z.string().optional()
-  }).optional(),
+  deploy: z.record(z.string(), z.any()).optional(),
   invoke: z.record(z.string(),z.string()).optional(),
   registry: z.string().optional(),
   redis_data: z.string().optional()
