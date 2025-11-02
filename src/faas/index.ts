@@ -105,10 +105,7 @@ const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
   codeDir: z.string().default(""),
   handler: z.string().optional(),
   replicas: z.number().optional(),
-  resource: z.object({
-    cpu: z.number().optional(),
-    memory: z.number().optional(),
-  }).optional(),
+  resource: z.record(z.string(), z.number()).optional(),
   triggers: z.array(FunctionTriggerSchema).default(() => []),
   pubsub: z.object({
     events: z.array(ir.types.ReferenceSchemaT(EventSchema)),
