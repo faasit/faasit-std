@@ -111,6 +111,7 @@ const FunctionSchema = ir.types.CustomBlockSchemaT(z.object({
     events: z.array(ir.types.ReferenceSchemaT(EventSchema)),
   }).optional(),
   role: z.string().optional(),
+  mount: z.array(z.string()).default([])
 }))
 
 const WorkflowSchema = ir.types.CustomBlockSchemaT(z.object({
